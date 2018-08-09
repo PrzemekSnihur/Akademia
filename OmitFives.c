@@ -1,4 +1,6 @@
 #include <assert.h>
+#include <stdbool.h>
+#include<stdio.h>
 
 /**
 * Function takes a 'start' and 'end' number of a range, and should return the count of all numbers except numbers with 5 in it.
@@ -7,14 +9,25 @@
 int numbers_without_five(int start, int end)
 {
     int total = 0;
+    int currVal;
+    bool isFive;
     while(start <= end)
     {
-        if((start % 5 == 0) && (start % 2 != 0)){
-            start++;
-            continue;
+        isFive = false;
+        currVal = start;
+        while(currVal > 0)
+        {
+            if(currVal % 10 == 5)
+                isFive = true;
+            currVal /= 10;
         }
-        total++;
-        start++;
+        if(isFive){
+            start++;
+        }
+        else{
+            total++;
+            start++;
+        }
     }
 	return total;
 }
@@ -24,8 +37,8 @@ void test_cases()
 	int answer = numbers_without_five(4, 8);
 	assert(answer == 4);
 
-	answer = numbers_without_five(1, 9);
-	assert(answer == 8);
+	answer = numbers_without_five(1, 51);
+	assert(answer == 44);
 
 	answer = numbers_without_five(4, 17);
 	assert(answer == 12);
