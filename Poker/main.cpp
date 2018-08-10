@@ -852,8 +852,10 @@ private:
 			for(int i = 0; i < players_count; i++){
                 if(i == roundWinner)
                     continue;
-                else if(players[i].playing)
+                else if(players[i].playing){
+                    std::cout << players[i].name << " cards: " << std::endl;
                     printWinningHand(i);
+                }
             }
 
 			players[roundWinner].money += pot;
