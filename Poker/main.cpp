@@ -712,6 +712,24 @@ private:
 		m_sleep(3);
 	}
 
+	void PrintPlayersCards()
+	{
+        std::cout << "   The winning hand:" << std::endl;
+			printWinningHand(roundWinner);
+			for(int i = 0; i < players_count; i++){
+                if(i == roundWinner)
+                    continue;
+                else if(players[i].goodToGo){
+                    std::cout << players[i].name << " cards: " << std::endl;
+                    printWinningHand(i);
+                }
+            }
+	}
+	void WithdrawMoney()
+	{
+        players[roundWinner].money += pot;
+	}
+
 	/* main gameplay function*/
 	void startGame()
 	{
@@ -772,6 +790,8 @@ private:
 				winner = getWinner();
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
+				WithdrawMoney();
+				PrintPlayersCards();
 				continue;
 			}
 
@@ -786,6 +806,8 @@ private:
 				winner = getWinner();
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
+				WithdrawMoney();
+				PrintPlayersCards();
 				continue;
 			}
 
@@ -800,6 +822,8 @@ private:
 				winner = getWinner();
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
+				WithdrawMoney();
+				PrintPlayersCards();
 				continue;
 			}
 
@@ -847,18 +871,9 @@ private:
 				std::cout << "STRAIGHT FLUSH";
 			std::cout << "\n\n";
 
-            std::cout << "   The winning hand:" << std::endl;
-			printWinningHand(roundWinner);
-			for(int i = 0; i < players_count; i++){
-                if(i == roundWinner)
-                    continue;
-                else if(players[i].playing){
-                    std::cout << players[i].name << " cards: " << std::endl;
-                    printWinningHand(i);
-                }
-            }
+            WithdrawMoney();
 
-			players[roundWinner].money += pot;
+            PrintPlayersCards();
 
 			i++;
 		}
