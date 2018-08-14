@@ -574,7 +574,7 @@ private:
                                 players[k % players_count].goodToGo = 1;
                                 players[k % players_count].bet = betOn;
                             }
-                            else
+                            else if(players[k % players_count].money > betOn)
                             {
                                 players[k % players_count].bet = (rand() % ((players[k % players_count].money / 3) + 10));
                                 pot += players[k % players_count].bet;
@@ -910,12 +910,12 @@ private:
 		m_sleep(3);
 	}
 
-	void PrintPlayersCards()
+	void PrintPlayersCards(int RoundWinner)
 	{
         std::cout << "   The winning hand:" << std::endl;
-			printWinningHand(roundWinner);
+			printWinningHand(RoundWinner);
 			for(int i = 0; i < players_count; i++){
-                if(i == roundWinner)
+                if(i == RoundWinner)
                     continue;
                 else if(players[i].round){
                     std::cout << players[i].name << " cards: " << std::endl;
@@ -990,7 +990,7 @@ private:
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
 				players[winner].money += pot;
-				PrintPlayersCards();
+				PrintPlayersCards(winner);
 				continue;
 			}
 
@@ -1006,7 +1006,7 @@ private:
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
 				players[winner].money += pot;
-				PrintPlayersCards();
+				PrintPlayersCards(winner);
 				continue;
 			}
 
@@ -1022,7 +1022,7 @@ private:
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
 				players[winner].money += pot;
-				PrintPlayersCards();
+				PrintPlayersCards(winner);
 				continue;
 			}
 
@@ -1072,7 +1072,7 @@ private:
 
             players[roundWinner].money += pot;
 
-            PrintPlayersCards();
+            PrintPlayersCards(roundWinner);
 
 			i++;
 		}
