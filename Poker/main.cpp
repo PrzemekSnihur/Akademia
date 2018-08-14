@@ -306,6 +306,11 @@ public:
         cout << endl;
 
         PrintCards(tableCards, 5);
+        cout << endl;
+
+        for(int i = players_count - 1; i >= HalfPlayers; i--)
+            cout << "      " << ((bind == i) ? "@" : " ") << "            ";
+        cout << endl;
 
 		for(int i = players_count - 1; i >= HalfPlayers; i--)
             cout << "  " << ((players[i].playing) ? (players[i].name) : "      ") << "         ";
@@ -313,11 +318,7 @@ public:
 
         for(int i = players_count - 1; i >= HalfPlayers; i--)
             cout << "   $" << setw(4) << ((players[i].playing) ? (players[i].money) : 0) << "         ";
-        cout << endl;
-
-        for(int i = players_count - 1; i >= HalfPlayers; i--)
-            cout << "      " << ((bind == i) ? "@" : " ") << "            ";
-        cout << endl;
+        cout << endl << endl;
 
         cout << setw(40) << "POT: " << pot << endl;
         cout << "----------------------------------------------------------------------------------" << endl;
