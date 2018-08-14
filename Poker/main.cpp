@@ -888,11 +888,6 @@ private:
 		using std::cout;
 		using std::endl;
 
-		if((tableCards[4].suit < 0 || tableCards[4].suit > 3) && (tableCards[4].rank < 0 || tableCards[4].rank > 12)){
-            cout << "No card to display\n";
-            return;
-        }
-
 		Card winningHand[5];
 		for (int i = 0; i < 3; i++)
 			winningHand[i] = tableCards[bestHand[winner][i]];
@@ -903,6 +898,11 @@ private:
 		qsort(winningHand, 5, sizeof(Card), compareCards);
 
 		cout << endl;
+
+		if((tableCards[4].suit < 0 || tableCards[4].suit > 3) && (tableCards[4].rank < 0 || tableCards[4].rank > 12)){
+            cout << "No card to display\n";
+            return;
+        }
 
 		PrintCards(winningHand,5);
 
