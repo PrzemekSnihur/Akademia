@@ -1,4 +1,3 @@
-
 /****************************************************************************/
 /*                A simple Texas Hold'em Poker simulartion.                 */
 /*                Program runs fine, but gameplay still has some bugs.      */
@@ -201,7 +200,7 @@ public:
 		tableCards[4] = deck1.hitme();
 	}
 
-	const char * findSiut(int CardSiut)
+	std::string findSiut(int CardSiut)
 	{
         switch(CardSiut)
             {
@@ -212,7 +211,7 @@ public:
             }
 	}
 
-	const char * findRank(int CardRank)
+	std::string findRank(int CardRank)
 	{
         switch(CardRank)
             {
@@ -256,7 +255,7 @@ public:
 
         for(int i = 0; i < amountOfCards; i++){
             if(cards[i].rank >= 0 && cards[i].rank <= 12)
-                cout << "|" << findRank(cards[i].rank) << setw(Width - strlen(findRank(cards[i].rank))) << "|" << setw(SpaceBetweenaCards);
+                cout << "|" << findRank(cards[i].rank) << setw(Width - findRank(cards[i].rank).size()) << "|" << setw(SpaceBetweenaCards);
             else
                 cout << "|" << setw(Width) << "|" << setw(SpaceBetweenaCards);
         }
@@ -264,7 +263,7 @@ public:
 
         for(int i = 0; i < amountOfCards; i++){
             if(cards[i].suit >= 0 && cards[i].suit <= 3)
-                cout << "|" << findSiut(cards[i].suit) << setw(Width - strlen(findSiut(cards[i].suit))) << "|" << setw(SpaceBetweenaCards);
+                cout << "|" << findSiut(cards[i].suit) << setw(Width - findSiut(cards[i].suit).size()) << "|" << setw(SpaceBetweenaCards);
             else
                 cout << "|" << setw(Width) << "|" << setw(SpaceBetweenaCards);
         }
@@ -990,7 +989,7 @@ private:
 				winner = getWinner();
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
-				WithdrawMoney();
+				players[winner].money += pot;
 				PrintPlayersCards();
 				continue;
 			}
@@ -1006,7 +1005,7 @@ private:
 				winner = getWinner();
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
-				WithdrawMoney();
+				players[winner].money += pot;
 				PrintPlayersCards();
 				continue;
 			}
@@ -1022,7 +1021,7 @@ private:
 				winner = getWinner();
 				std::cout << players[winner].name << " wins $" << pot << "\n\n";
 				i++;
-				WithdrawMoney();
+				players[winner].money += pot;
 				PrintPlayersCards();
 				continue;
 			}
@@ -1071,7 +1070,7 @@ private:
 				std::cout << "STRAIGHT FLUSH";
 			std::cout << "\n\n";
 
-            WithdrawMoney();
+            players[roundWinner].money += pot;
 
             PrintPlayersCards();
 
