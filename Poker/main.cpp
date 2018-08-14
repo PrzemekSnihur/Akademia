@@ -9,6 +9,7 @@
 #include <string>
 #include <cstdlib>
 #include <ctime>
+#include <string.h>
 #ifdef __linux__
 #include <unistd.h>
 #elif _WIN32
@@ -155,16 +156,16 @@ public:
 			players[i].playing = true;
 		}
 
-		players[0].name = "Wojciech";
-		players[1].name = "Tristan";
-		players[2].name = "Michal";
-		players[3].name = "Edyta";
-		players[playerIndex].name = name;
-		players[5].name = "Kamil";
+		for(int i = 0; i < players_count; i++){
+            if(playerIndex == i)
+                players[playerIndex].name = name;
+            else
+                players[i].name = "Player" + std::to_string(i+1);
+            }
+
 
 		startGame();
 	}
-
 
 	void deal()
 	{
@@ -178,8 +179,10 @@ public:
 				}
 			}
 		}
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++){
 			tableCards[i].rank = -1;
+			tableCards[i].suit = -1;
+        }
 	}
 
 	void flop()
@@ -198,7 +201,7 @@ public:
 		tableCards[4] = deck1.hitme();
 	}
 
-	std::string findSiut(int CardSiut)
+	const char * findSiut(int CardSiut)
 	{
         switch(CardSiut)
             {
@@ -206,11 +209,10 @@ public:
                 case 1: return "Spades";
                 case 2: return "Heart";
                 case 3: return "Clubs";
-                default: return " ";
             }
 	}
 
-	std::string findRank(int CardRank)
+	const char * findRank(int CardRank)
 	{
         switch(CardRank)
             {
@@ -243,6 +245,7 @@ public:
             cout << setw(SpaceBetweenaCards);
         }
         cout << setw(0) << endl;
+
         for(int i = 0; i < amountOfCards; i++)
             cout << "|" << setw(Width) << "|" << setw(SpaceBetweenaCards);
        cout << setw(0) << endl;
@@ -253,14 +256,17 @@ public:
 
         for(int i = 0; i < amountOfCards; i++){
             if(cards[i].rank >= 0 && cards[i].rank <= 12)
-                cout << "|" << findRank(cards[i].rank) << setw(Width - findRank(cards[i].rank).size()) << "|" << setw(SpaceBetweenaCards);
+                cout << "|" << findRank(cards[i].rank) << setw(Width - strlen(findRank(cards[i].rank))) << "|" << setw(SpaceBetweenaCards);
             else
                 cout << "|" << setw(Width) << "|" << setw(SpaceBetweenaCards);
         }
         cout << setw(0) << endl;
 
         for(int i = 0; i < amountOfCards; i++){
-            cout << "|" << findSiut(cards[i].suit) << setw(Width - findSiut(cards[i].suit).size()) << "|" << setw(SpaceBetweenaCards);
+            if(cards[i].suit >= 0 && cards[i].suit <= 3)
+                cout << "|" << findSiut(cards[i].suit) << setw(Width - strlen(findSiut(cards[i].suit))) << "|" << setw(SpaceBetweenaCards);
+            else
+                cout << "|" << setw(Width) << "|" << setw(SpaceBetweenaCards);
         }
         cout << setw(0) << endl;
 
@@ -284,52 +290,57 @@ public:
 		using std::cout;
 		using std::endl;
 		using std::setw;
-
+		int HalfPlayers = players_count / 2;
 
 		cout << "----------------------------------------------------------------------------------" << endl;
-		cout << "  " << ((players[0].playing) ? (players[0].name) : "      ") << "         " << ((players[1].playing) ? (players[1].name) : "     ") << "           "
-			<< ((players[2].playing) ? (players[2].name) : "    ") << endl;
-		cout << "   $" << setw(4) << ((players[0].playing) ? (players[0].money) : 0) << "         $" << setw(4) << ((players[1].playing) ? (players[1].money) : 0)
-			<< "           $" << setw(4) << ((players[2].playing) ? (players[2].money) : 0) << endl;
-		/*cout << "     _____________________________" << endl;
-		cout << "    / " << ((bind == 0) ? "@" : " ") << "            " << ((bind == 1) ? "@" : " ") << "            " << ((bind == 2) ? "@" : " ") << " \\" << endl;
-		cout << "   /  ___   ___   ___   ___   ___  \\" << endl;
-		cout << "   | | " << ((tableCards[0].rank) >= 0 ? ranks[tableCards[0].rank] : " ") << " | | " << ((tableCards[1].rank) >= 0 ? ranks[tableCards[1].rank] : " ") << " | | " << ((tableCards[2].rank) >= 0 ? ranks[tableCards[2].rank] : " ") << " | | "
-			<< ((tableCards[3].rank) >= 0 ? ranks[tableCards[3].rank] : " ") << " | | " << ((tableCards[4].rank) >= 0 ? ranks[tableCards[4].rank] : " ") << " | |" << endl;
-		cout << "   | | " << ((tableCards[0].rank) >= 0 ? suits[tableCards[0].suit] : " ") << " | | " << ((tableCards[1].rank) >= 0 ? suits[tableCards[1].suit] : " ") << " | | " << ((tableCards[2].rank) >= 0 ? suits[tableCards[2].suit] : " ") << " | | "
-			<< ((tableCards[3].rank) >= 0 ? suits[tableCards[3].suit] : " ") << " | | " << ((tableCards[4].rank) >= 0 ? suits[tableCards[4].suit] : " ") << " | |" << endl;
-		cout << "   | |___| |___| |___| |___| |___| |" << endl;
-		cout << "   |                               |" << endl;
-		cout << "   |	       Pot = $" << setw(4) << pot << "         |" << endl;
-		cout << "   \\                               /" << endl;
-		cout << "    \\_" << ((bind == 5) ? "@" : "_") << "_____________" << ((bind == 4) ? "@" : "_") << "___________" << ((bind == 3) ? "@" : "_") << "_/" << endl;
-		cout << endl;*/
-		PrintCards(tableCards,5);
-		cout << "  " << ((players[5].playing) ? (players[5].name) : "      ") << "          " << ((players[4].playing) ? (players[4].name) : "      ") << "         "
-			<< ((players[3].playing) ? (players[3].name) : "    ") << endl;
-		cout << "   $" << setw(4) << ((players[5].playing) ? (players[5].money) : 0) << "          $" << setw(4) << ((players[4].playing) ? (players[4].money) : 0)
-			<< "         $" << setw(4) << ((players[3].playing) ? (players[3].money) : 0) << endl;
+		for(int i = 0; i < HalfPlayers; i++)
+            cout << "  " << ((players[i].playing) ? (players[i].name) : "      ") << "         ";
+        cout << endl;
+
+        for(int i = 0; i < HalfPlayers; i++)
+            cout << "   $" << setw(4) << ((players[i].playing) ? (players[i].money) : 0) << "         ";
+        cout << endl;
+
+        for(int i = 0; i < HalfPlayers; i++)
+            cout << "      " << ((bind == i) ? "@" : " ") << "            ";
+        cout << endl;
+
+        PrintCards(tableCards, 5);
+
+		for(int i = players_count - 1; i >= HalfPlayers; i--)
+            cout << "  " << ((players[i].playing) ? (players[i].name) : "      ") << "         ";
+        cout << endl;
+
+        for(int i = players_count - 1; i >= HalfPlayers; i--)
+            cout << "   $" << setw(4) << ((players[i].playing) ? (players[i].money) : 0) << "         ";
+        cout << endl;
+
+        for(int i = players_count - 1; i >= HalfPlayers; i--)
+            cout << "      " << ((bind == i) ? "@" : " ") << "            ";
+        cout << endl;
+
+        cout << setw(40) << "POT: " << pot << endl;
         cout << "----------------------------------------------------------------------------------" << endl;
 		cout << endl;
 
 		if (players[playerIndex].round)
 		{
             cout << "   Your hand:" << endl;
-           PrintCards(players[playerIndex].cards,2);
+           PrintCards(players[playerIndex].cards, 2);
 		}
 
 		m_sleep(3);
 	}
 
 private:
-	static const int players_count = 6;
+	static const int players_count = 8;
 	Player players[players_count];
 	Deck deck1;
 	int bind;
 	Card tableCards[5];
 	int pot, action, rational, betOn, winner, maxPoints, roundWinner;
-	int handPoints[6];
-	int bestHand[6][3];
+	int handPoints[players_count];
+	int bestHand[players_count][3];
 	enum Decision{FLOP = 1, CHECK, BET_or_CALL, RAISE};
 	int playerIndex = 4;
 	bool raise;
@@ -387,7 +398,7 @@ private:
 		for (int k = 0; k < players_count; k++)
 			players[k].goodToGo = 0;
 
-		for (int k = bind + 1; k < bind + 7; k++)
+		for (int k = bind + 1; k < bind + (players_count + 1); k++)
 		{
 			/* human player actions */
 			if (k % players_count == playerIndex && players[playerIndex].round)
@@ -508,7 +519,7 @@ private:
                     players[playerIndex].money -= players[playerIndex].bet;
                     players[playerIndex].goodToGo = 1;
                     betOn = players[playerIndex].bet;
-                    cout << "\t+ " << players[playerIndex].name << " raise " << betOn << "$\n";
+                    cout << "\t+ " << players[playerIndex].name << " bets " << players[playerIndex].bet << "$\n";
                     raise = true;
 
 				}
@@ -544,9 +555,9 @@ private:
                     int RaiseOrBet = (rand() % 2) + 1;
                     if(RaiseOrBet == 1 && players[k % players_count].money > betOn)
                     {
-                        players[k % players_count].bet = betOn + (rand() % (players[k % players_count].money / 3) + 10);
+                        players[k % players_count].bet = betOn + (rand() % (((players[k % players_count].money-betOn) / 3) + 10));
                         pot += players[k % players_count].bet;
-                        cout << "\t+ " << players[k % players_count].name << " raise " << players[k % players_count].bet << "$" << endl;
+                        cout << "\t+ " << players[k % players_count].name << " bets " << players[k % players_count].bet << "$" << endl;
                         players[k % players_count].goodToGo = 1;
                         betOn = players[k % players_count].bet;
                         players[k % players_count].money -= players[k % players_count].bet;
@@ -565,7 +576,7 @@ private:
                             }
                             else
                             {
-                                players[k % players_count].bet = (rand() % (players[k % players_count].money / 3) + 10);
+                                players[k % players_count].bet = (rand() % ((players[k % players_count].money / 3) + 10));
                                 pot += players[k % players_count].bet;
                                 players[k % players_count].money -= players[k % players_count].bet;
                                 cout << '\a';
@@ -582,7 +593,7 @@ private:
 
 		if (betOn && playersToBet())
 		{
-			for (int k = bind + 1; k < bind + 7; k++)
+			for (int k = bind + 1; k < bind + (players_count + 1); k++)
 			{
 				if (k % players_count == playerIndex)
 				{
@@ -665,16 +676,19 @@ private:
             for (int k = 0; k < players_count; k++)
                 if(k == playerIndex && players[k].bet < betOn && players[k].goodToGo == 1)
                 {
-                     cout << "\t\t\t\t\tYour action: (1) FLOP (4) ADD TO POT ";
+                     cout << "\t\t\t\t\tYour action: (1) FLOP ";
+                     if(players[k].money >= (betOn - players[k].bet))
+                        cout << "(4) ADD TO POT ";
                      cin >> action;
-                     if(action == Decision::FLOP)
+                     if(action == Decision::RAISE && players[k].money >= (betOn - players[k].bet))
                      {
-                        cout << "\t- " << players[k].name << " flops...\n";
-                        players[k].goodToGo = 0;
+                        players[k].money -= (betOn - players[k].bet);
+                        pot += (betOn - players[k].bet);
                      }
                      else
                      {
-                        players[k].money -= (betOn - players[k].bet);
+                        cout << "\t- " << players[k].name << " flops...\n";
+                        players[k].round = 0;
                      }
                 }
                 else if(players[k].bet < betOn && players[k].goodToGo == 1)
@@ -682,13 +696,13 @@ private:
                     int random = (rand() % 4) + 1;
                     if(players[k].money >= (betOn - players[k].bet) && (random >= 1 && random <= 3))
                     {
-                        //cout << players[k].name << " add " << (betOn - players[k].bet) << " $\n";
                         players[k].money -= (betOn - players[k].bet);
+                        pot += (betOn - players[k].bet);
                     }
                     else
                     {
                         cout << "\t- " << players[k].name << " flops...\n";
-                        players[k].goodToGo = 0;
+                        players[k].round = 0;
                     }
                 }
         }
@@ -874,6 +888,11 @@ private:
 		using std::cout;
 		using std::endl;
 
+		if((tableCards[4].suit < 0 || tableCards[4].suit > 3) && (tableCards[4].rank < 0 || tableCards[4].rank > 12)){
+            cout << "No card to display\n";
+            return;
+        }
+
 		Card winningHand[5];
 		for (int i = 0; i < 3; i++)
 			winningHand[i] = tableCards[bestHand[winner][i]];
@@ -884,11 +903,9 @@ private:
 		qsort(winningHand, 5, sizeof(Card), compareCards);
 
 		cout << endl;
-		/*cout << "   ___   ___   ___   ___   ___" << endl;
-		cout << "  | " << ranks[winningHand[0].rank] << " | | " << ranks[winningHand[1].rank] << " | | " << ranks[winningHand[2].rank] << " | | " << ranks[winningHand[3].rank] << " | | " << ranks[winningHand[4].rank] << " |" << endl;
-		cout << "  | " << suits[winningHand[0].suit] << " | | " << suits[winningHand[1].suit] << " | | " << suits[winningHand[2].suit] << " | | " << suits[winningHand[3].suit] << " | | " << suits[winningHand[4].suit] << " |" << endl;
-		cout << "  |___| |___| |___| |___| |___|" << endl;*/
+
 		PrintCards(winningHand,5);
+
 		cout << endl << endl;
 		m_sleep(3);
 	}
@@ -900,7 +917,7 @@ private:
 			for(int i = 0; i < players_count; i++){
                 if(i == roundWinner)
                     continue;
-                else if(players[i].goodToGo){
+                else if(players[i].round){
                     std::cout << players[i].name << " cards: " << std::endl;
                     printWinningHand(i);
                 }
@@ -909,6 +926,7 @@ private:
 	void WithdrawMoney()
 	{
         players[roundWinner].money += pot;
+        pot = 0;
 	}
 
 	/* main gameplay function*/
