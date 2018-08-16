@@ -584,6 +584,16 @@ private:
                                 betOn = players[k % players_count].bet;
                                 players[k % players_count].goodToGo = 1;
                             }
+                            else
+                            {
+                                players[k % players_count].round = 0;
+                                cout << "\t- " << players[k % players_count].name << " flops..." << endl;
+                            }
+                        }
+                        else
+                        {
+                            players[k % players_count].round = 0;
+                            cout << "\t- " << players[k % players_count].name << " flops..." << endl;
                         }
 					}
 				}
