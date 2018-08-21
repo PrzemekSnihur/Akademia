@@ -17,11 +17,6 @@ void dostuff(int sock)
         char buffer[256];
         bzero(buffer, 256);
         i = read(sock, buffer, 255);
-//	for(int i = 0; i < 5; i++){
-//            for(int j = 0; j <= 6; j++)
-//                i = write(sock,"_",1);
-//            i = write(sock,"     ",5);
-//        }
 	if(buffer[0] != '\0')
         	printf("Here is a message: %s",buffer);
         if(i < 0)
