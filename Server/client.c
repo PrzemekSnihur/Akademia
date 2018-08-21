@@ -57,8 +57,6 @@ int main(int argc, char *argv[])
 			error("ERROR writing to socket");
 		}
 		bzero(buffer,256);
-		//n = read(sockfd,buffer,255);
-		//printf("%s\n", buffer);
 	}
 	return 0;
 }
