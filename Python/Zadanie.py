@@ -10,6 +10,7 @@ API_KEY = "ed573f66"
 
 omdb.set_default('apikey', API_KEY)
 
+forbiddenCharacters = [':', '?', '<', '>', '|', '"', '\\', '/', '*']
 print("Write movie titles: ")
 title = input()
 titles = []
@@ -21,9 +22,11 @@ for movie in titles:
     results = omdb.title(movie)
     title = results['title']
     for character in title:
-        if re.match(r':',character):
-            title.replace(character,'')
-    print(title)
+        if character in forbiddenCharacters:
+           title = title.replace(character,"")
+    if not len(title):
+        print("Write name of your folder: ")
+        title = input()
     newpath = f"C:/Movies/{title}"
     if not os.path.exists(newpath):
         os.makedirs(newpath)
@@ -31,11 +34,11 @@ for movie in titles:
     fout.write("Title: " + results['title'] + "\n")
     fout.write("Rating: " + results['imdb_rating']+ "\n")
     fout.write("Runtime: " + results['runtime']+ "\n")
-    fout.write("Title: " + results['title']+ "\n")
     if results['released'] == "N/A":
         fout.write("Released: N/A"+ "\n")
     else:
         fout.write(f"Released:  {datetime.datetime.strptime(results['released'],'%d %b %Y').strftime('%d.%m.%Y')}"+ "\n")
     fout.write("Popularity: " + results['imdb_votes']+ "\n")
     poster = results['poster']
-    urllib.request.urlretrieve(poster, f"{newpath}/{title}.jpg")
+    if not poster == "N/A":
+        urllib.request.urlretrieve(poster, f"{newpath}/{title}.jpg")
